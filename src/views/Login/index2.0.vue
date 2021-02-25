@@ -21,7 +21,7 @@
 				  			<el-input v-model.number="ruleForm.code"></el-input>
 						</el-col>
 						<el-col :span="9">
-				  			<el-button type="success" class="block" @click="getSms()">获取验证码</el-button>
+				  			<el-button type="success" class="block">获取验证码</el-button>
 						</el-col>
 					</el-row>
 				</el-form-item>
@@ -36,7 +36,6 @@
 </template>
 
 <script>
-import { GetSms } from '@/api/login';
 import { stripscript, validateEmail, validatePass, validateVCode  } from '@/utils/validate.js'
 export default {
 	name: "login",
@@ -48,7 +47,7 @@ export default {
     	  	} else if (validateEmail(value)) {
     	  	    callback(new Error('邮箱格式有误'));
     	  	} else {
-				callback();
+				  callback();
 			}
     	};
 		//验证密码
@@ -135,13 +134,6 @@ export default {
     	      }
     	    });
     	},
-		//获取验证码
-		getSms() {
-			let data = {
-				username: this.ruleForm.username
-			}
-			GetSms(data);
-		}
 	},
 };
 </script>
