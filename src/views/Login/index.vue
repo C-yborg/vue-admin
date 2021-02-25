@@ -26,7 +26,7 @@
 					</el-row>
 				</el-form-item>
 				<el-form-item>
-				  	<el-button type="danger" @click="submitForm('ruleForm')" class="login-btn block">提交</el-button>
+				  	<el-button type="danger" @click="submitForm('ruleForm')" class="login-btn block" :disabled='loginButtonStatus'>{{model === 'login' ? '登录' :'注册' }}</el-button>
 				</el-form-item>
 			</el-form>
 		<!-- 表单end -->
@@ -93,6 +93,7 @@ export default {
 				{ txt: '注册', current: false, type: 'register' }
 			],
 			model: 'login',
+			loginButtonStatus: true,
 			ruleForm: {
         		username: '',
         		password: '',
@@ -118,6 +119,7 @@ export default {
 	created() {},
 	mounted() {},
 	methods:{
+		//切换登录、注册
 		toggleMenu(data) {
 			this.menuTab.forEach(elem => {
 				elem.current = false;
@@ -125,6 +127,7 @@ export default {
 			this.model = data.type;
 			data.current = true;
 		},
+		//提交表单
 		submitForm(formName) {
     	    this.$refs[formName].validate((valid) => {
     	      if (valid) {
@@ -137,10 +140,11 @@ export default {
     	},
 		//获取验证码
 		getSms() {
-			let data = {
-				username: this.ruleForm.username
+			if (this.ruleForm.username === '') {
+				return false;
 			}
-			GetSms(data);
+			//请求的接口
+			GetSms({username: this.ruleForm.username});
 		}
 	},
 };
