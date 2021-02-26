@@ -21,7 +21,7 @@
 				  			<el-input v-model.number="ruleForm.code"></el-input>
 						</el-col>
 						<el-col :span="9">
-				  			<el-button type="success" class="block" @click="getSms()">获取验证码</el-button>
+				  			<el-button type="success" class="block" @click="getSms()" :disabled='codeButtonStatus.status'>{{codeButtonStatus.text}}</el-button>
 						</el-col>
 					</el-row>
 				</el-form-item>
@@ -92,8 +92,18 @@ export default {
 				{ txt: '登录', current: true, type: 'login' },
 				{ txt: '注册', current: false, type: 'register' }
 			],
+			//登录注册切换模块
 			model: 'login',
+			//登陆注册按钮状态
 			loginButtonStatus: true,
+			//获取验证码按钮状态
+			codeButtonStatus: {
+				status: false,
+				text: '获取验证码'
+			},
+			//倒计时
+			timer: null,
+			//表单数据
 			ruleForm: {
         		username: '',
         		password: '',
@@ -125,7 +135,10 @@ export default {
 				elem.current = false;
 			})
 			this.model = data.type;
+			//当前选中模块深色背景色
 			data.current = true;
+			//重置表单
+			this.$refs.ruleForm.resetFields();   //等价 this.$refs['ruleForm'].resetFields();
 		},
 		//提交表单
 		submitForm(formName) {
@@ -140,11 +153,43 @@ export default {
     	},
 		//获取验证码
 		getSms() {
-			if (this.ruleForm.username === '') {
+			// if (this.ruleForm.username === '') {
+			// 	this.$message.error('邮箱不能为空！')
+			// 	return false;
+			// }
+			//请求的接口
+			if (validateEmail(this.ruleForm.username)) {
+				this.$message.error('邮箱格式有误，请重新输入！');
 				return false;
 			}
-			//请求的接口
-			GetSms({username: this.ruleForm.username});
+			//请求验证码后 按钮禁用，文本改为’发送中‘
+			this.codeButtonStatus.status = true;
+			this.codeButtonStatus.text = '发送中';
+
+			setTimeout(() => {
+				GetSms({username: this.ruleForm.username, model: this.model})
+				.then(response => {
+					let data = response.data
+					this.$message({
+						message: data.message,
+						type: 'success'
+					})
+					this.loginButtonStatus = false;
+					this.countDown(60);
+				})
+				.catch(error => {
+					console.log(error);
+				})
+			}, 3000);
+		},
+		//验证码倒计时
+		countDown(number) {
+			let time = number;
+			this.timer = setInterval(() => {
+				time--;
+				console.log(time);
+				this.codeButtonStatus.text = `倒计时${time}秒`;
+			},1000)
 		}
 	},
 };
