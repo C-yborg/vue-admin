@@ -5,7 +5,7 @@ import { Message } from 'element-ui';
 const BASEURL = process.env.NODE_ENV === 'production' ? '11' : '/devApi';
 const service = axios.create({
     baseURL: BASEURL,
-    timeout: 10000   //请求超时时间
+    timeout: 15000   //请求超时时间
 });
 
 // 添加请求拦截器

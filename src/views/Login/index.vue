@@ -18,7 +18,7 @@
 				<el-form-item label="验证码" prop="code" class="item-from">
 					<el-row :gutter="10">
 						<el-col :span="15">
-				  			<el-input v-model.number="ruleForm.code"></el-input>
+				  			<el-input v-model="ruleForm.code"></el-input>
 						</el-col>
 						<el-col :span="9">
 				  			<el-button type="success" class="block" @click="getSms()" :disabled='codeButtonStatus.status'>{{codeButtonStatus.text}}</el-button>
@@ -36,7 +36,7 @@
 </template>
 
 <script>
-import { GetSms } from '@/api/login';
+import { GetSms, Register, Login } from '@/api/login';
 import { stripscript, validateEmail, validatePass, validateVCode  } from '@/utils/validate.js'
 export default {
 	name: "login",
@@ -137,14 +137,29 @@ export default {
 			this.model = data.type;
 			//当前选中模块深色背景色
 			data.current = true;
-			//重置表单
+			//重置 清空表单数据
 			this.$refs.ruleForm.resetFields();   //等价 this.$refs['ruleForm'].resetFields();
 		},
 		//提交表单
 		submitForm(formName) {
     	    this.$refs[formName].validate((valid) => {
     	      if (valid) {
-    	        alert('submit!');
+				  let requestData = {
+						username: this.ruleForm.username,
+						password: this.ruleForm.password,
+						code: this.ruleForm.code
+				  }
+				  Register(requestData).then(response => {
+					  console.log(response);
+					  let data = response.data;
+					  this.$message({
+						  message: data.message,
+						  type: 'success'
+					  })
+				  }).catch(error => {
+
+				  });
+    	        // alert('submit!');
     	      } else {
     	        console.log('error submit!!');
     	        return false;
@@ -166,21 +181,19 @@ export default {
 			this.codeButtonStatus.status = true;
 			this.codeButtonStatus.text = '发送中';
 
-			setTimeout(() => {
-				GetSms({username: this.ruleForm.username, model: this.model})
-				.then(response => {
-					let data = response.data
-					this.$message({
-						message: data.message,
-						type: 'success'
-					})
-					this.loginButtonStatus = false;
-					this.countDown(60);
+			GetSms({username: this.ruleForm.username, model: this.model})
+			.then(response => {
+				let data = response.data
+				this.$message({
+					message: data.message,
+					type: 'success'
 				})
-				.catch(error => {
-					console.log(error);
-				})
-			}, 3000);
+				this.loginButtonStatus = false;
+				this.countDown(5);
+			})
+			.catch(error => {
+				console.log(error);
+			})
 		},
 		//验证码倒计时
 		countDown(number) {
@@ -188,7 +201,13 @@ export default {
 			this.timer = setInterval(() => {
 				time--;
 				console.log(time);
-				this.codeButtonStatus.text = `倒计时${time}秒`;
+				if ( time === 0 ) {
+					clearInterval(this.timer);
+					this.codeButtonStatus.status = false;
+					this.codeButtonStatus.text = '再次获取'
+				} else {
+					this.codeButtonStatus.text = `倒计时${time}秒`;
+				}
 			},1000)
 		}
 	},
