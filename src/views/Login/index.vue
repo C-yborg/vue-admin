@@ -31,7 +31,6 @@
 			</el-form>
 		<!-- 表单end -->
 		</div>
-		
 	</div>
 </template>
 
@@ -80,7 +79,7 @@ export default {
 		//验证验证码
 		let validateCode = (rule, value, callback) => {
         	if (!value) {
-        	  	return callback(new Error('年龄不能为空'));
+        	  	return callback(new Error('验证码不能为空'));
         	} else if (validateVCode(value)) {
 				callback(new Error('验证码格式有误'))
 			} else {
@@ -144,22 +143,8 @@ export default {
 		submitForm(formName) {
     	    this.$refs[formName].validate((valid) => {
     	      if (valid) {
-				  let requestData = {
-						username: this.ruleForm.username,
-						password: this.ruleForm.password,
-						code: this.ruleForm.code
-				  }
-				  Register(requestData).then(response => {
-					  console.log(response);
-					  let data = response.data;
-					  this.$message({
-						  message: data.message,
-						  type: 'success'
-					  })
-				  }).catch(error => {
-
-				  });
-    	        // alert('submit!');
+				  //验证通过后
+				  this.model === 'login' ? this.login() : this.register();
     	      } else {
     	        console.log('error submit!!');
     	        return false;
@@ -180,7 +165,7 @@ export default {
 			//请求验证码后 按钮禁用，文本改为’发送中‘
 			this.codeButtonStatus.status = true;
 			this.codeButtonStatus.text = '发送中';
-
+			console.log(this.model);
 			GetSms({username: this.ruleForm.username, model: this.model})
 			.then(response => {
 				let data = response.data
@@ -189,18 +174,56 @@ export default {
 					type: 'success'
 				})
 				this.loginButtonStatus = false;
-				this.countDown(5);
+				this.countDown(60);
 			})
 			.catch(error => {
 				console.log(error);
 			})
 		},
+		//登录
+		login() {
+			let requestData = {
+				username: this.ruleForm.username,
+				password: this.ruleForm.password,
+				code: this.ruleForm.code,
+				module: 'register'
+			}
+			Login(requestData).then(response => {
+				console.log(response,11);
+			}).catch(error => {
+				console.log(error);
+			})
+		},
+		//注册
+		register() {
+			let requestData = {
+				username: this.ruleForm.username,
+				password: this.ruleForm.password,
+				code: this.ruleForm.code,
+				module: 'success'
+			}
+			Register(requestData).then(response => {
+				console.log(response);
+				let data = response.data;
+				this.$message({
+					message: data.message,
+					type: 'success'
+				});
+				//模拟注册成功
+				this.toggleMenu(this.menuTab[0]);
+				this.clearCountDown();
+			}).catch(error => {});
+		},
+
 		//验证码倒计时
 		countDown(number) {
+			//判断定时器是否存在 存在就清楚
+			if( this.timer ) { clearInterval(this.timer) }
+			// bug 60和0不见了
 			let time = number;
 			this.timer = setInterval(() => {
 				time--;
-				console.log(time);
+				// console.log(time);
 				if ( time === 0 ) {
 					clearInterval(this.timer);
 					this.codeButtonStatus.status = false;
@@ -209,6 +232,13 @@ export default {
 					this.codeButtonStatus.text = `倒计时${time}秒`;
 				}
 			},1000)
+		},
+		//清除倒计时
+		clearCountDown() {
+			//注册成功后自动跳到登录  还原验证码按钮默认状态
+			this.codeButtonStatus.status = false;
+			this.codeButtonStatus.text = '获取验证码';
+			clearInterval(this.timer);
 		}
 	},
 };
