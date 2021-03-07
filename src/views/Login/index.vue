@@ -35,6 +35,7 @@
 </template>
 
 <script>
+import sha1 from 'js-sha1';
 import { GetSms, Register, Login } from '@/api/login';
 import { stripscript, validateEmail, validatePass, validateVCode  } from '@/utils/validate.js'
 export default {
@@ -136,8 +137,8 @@ export default {
 			this.model = data.type;
 			//当前选中模块深色背景色
 			data.current = true;
-			//重置 清空表单数据
-			this.$refs.ruleForm.resetFields();   //等价 this.$refs['ruleForm'].resetFields();
+			this.resetFromData();
+			this.clearCountDown();
 		},
 		//提交表单
 		submitForm(formName) {
@@ -151,6 +152,16 @@ export default {
     	      }
     	    });
     	},
+		//重置表单数据
+		resetFromData() {
+			//重置 清空表单数据
+			this.$refs.ruleForm.resetFields();   //等价 this.$refs['ruleForm'].resetFields();
+		},
+		//更新验证码按钮状态
+		updateButtonStatus(params) {
+			this.codeButtonStatus.status = params.status;
+			this.codeButtonStatus.text = params.text;
+		},
 		//获取验证码
 		getSms() {
 			// if (this.ruleForm.username === '') {
@@ -163,8 +174,7 @@ export default {
 				return false;
 			}
 			//请求验证码后 按钮禁用，文本改为’发送中‘
-			this.codeButtonStatus.status = true;
-			this.codeButtonStatus.text = '发送中';
+			this.updateButtonStatus({status:true,text: '发送中'});
 			console.log(this.model);
 			GetSms({username: this.ruleForm.username, model: this.model})
 			.then(response => {
@@ -184,7 +194,7 @@ export default {
 		login() {
 			let requestData = {
 				username: this.ruleForm.username,
-				password: this.ruleForm.password,
+				password: sha1(this.ruleForm.password),
 				code: this.ruleForm.code,
 				module: 'register'
 			}
@@ -198,7 +208,7 @@ export default {
 		register() {
 			let requestData = {
 				username: this.ruleForm.username,
-				password: this.ruleForm.password,
+				password: sha1(this.ruleForm.password),
 				code: this.ruleForm.code,
 				module: 'success'
 			}
@@ -226,8 +236,7 @@ export default {
 				// console.log(time);
 				if ( time === 0 ) {
 					clearInterval(this.timer);
-					this.codeButtonStatus.status = false;
-					this.codeButtonStatus.text = '再次获取'
+					this.updateButtonStatus({status: false, text: '再次获取'});
 				} else {
 					this.codeButtonStatus.text = `倒计时${time}秒`;
 				}
@@ -236,8 +245,7 @@ export default {
 		//清除倒计时
 		clearCountDown() {
 			//注册成功后自动跳到登录  还原验证码按钮默认状态
-			this.codeButtonStatus.status = false;
-			this.codeButtonStatus.text = '获取验证码';
+			this.updateButtonStatus({status: false, text: '获取验证码'});
 			clearInterval(this.timer);
 		}
 	},
