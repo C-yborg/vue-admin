@@ -29,6 +29,7 @@
                 </el-submenu>
             </template>
         </el-menu>
+        <svg-icon/>
     </div>
 </template>
 
