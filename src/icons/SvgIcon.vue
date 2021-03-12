@@ -36,9 +36,9 @@ export default {
 
 <style lang='scss' scoped>
 .svg-icon {
-  width: 2em;
-  height: 2em;
-  font-size: 100px;
-  fill: red;
+  width: 1em;
+  height: 1em;
+  fill: currentColor;
 }
+
 </style>

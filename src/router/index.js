@@ -28,6 +28,7 @@ const routes = [
         redirect: 'index',
         meta: {
             name: '控制台',
+            icon: 'console'
         },
         component: Layout,
         children: [
@@ -49,6 +50,7 @@ const routes = [
         name: 'Info',
         meta: {
             name: '信息管理',
+            icon: 'info'
         },
         component: Layout,
         children: [
@@ -78,6 +80,7 @@ const routes = [
         name: 'User',
         meta: {
             name: '用户管理',
+            icon: 'user'
         },
         component: Layout,
         children: [

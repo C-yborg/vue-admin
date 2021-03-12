@@ -17,7 +17,7 @@
           v-if="!item.hidden"
         >
           <template slot="title">
-            <i class="el-icon-location"></i>
+            <svg-icon :iconClass="item.meta.icon" :className="item.meta.icon" />
             <span slot="title">{{ item.meta.name }}</span>
           </template>
           <el-menu-item
@@ -29,7 +29,7 @@
         </el-submenu>
       </template>
     </el-menu>
-    <svg-icon iconClass="console" className="menu" />
+    
   </div>
 </template>
 
@@ -65,5 +65,9 @@ export default {
   width: $navMenu;
   height: 100vh;
   background-color: #344a5f;
+}
+svg {
+  font-size: 20px;
+  margin-right: 10px;
 }
 </style>
