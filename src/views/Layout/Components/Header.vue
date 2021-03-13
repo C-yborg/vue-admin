@@ -22,6 +22,9 @@ export default {
     data() {
         return {};
     },
+    mounted() {
+        
+    },
     methods: {
         // 控制Nav的伸缩
         navMenuState() {
@@ -69,7 +72,7 @@ export default {
 //左侧导航关闭时 header的偏移量
 .close {
     #header-wrap {
-        left: 50px;
+        left: 64px;
     }
 }
 </style>

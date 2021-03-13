@@ -89,9 +89,9 @@ export default {
 }
 .close {
   #nav-wrap {
-    width: 50px;
+    width: 64px;
     img {
-      width: 30px;
+      width: 80%;
     }
   }
 }

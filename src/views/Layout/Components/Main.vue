@@ -1,26 +1,23 @@
 <template>
-    <div id='main-wrap'>
+    <div id="main-wrap">
         <div class="main-content">
-            <div class="content">1111</div>
+            <div class="content"><router-view /></div>
         </div>
-        <router-view/>
     </div>
 </template>
 
 <script>
 export default {
-    // name: 'layout',
+    name: 'layoutMain',
     components: {},
     data() {
-        return {
-
-        }
-    }
-}
+        return {};
+    },
+};
 </script>
 
 <style lang='scss' scoped>
-@import '@/styles/config.scss';
+@import "@/styles/config.scss";
 #main-wrap {
     height: 100vh;
     // position: fixed;
@@ -44,7 +41,7 @@ export default {
     border-bottom: none;
     background-color: #fff;
     @include webkit(box-sizing, border-box);
-    @include webkit(transition, all .3s ease 0s);
+    @include webkit(transition, all 0.3s ease 0s);
 }
 //左侧导航展开时 main的偏移量
 .open {
@@ -55,7 +52,7 @@ export default {
 //左侧导航关闭时 main的偏移量
 .close {
     .main-content {
-        left: 50px;
+        left: 64px;
     }
 }
 </style>
