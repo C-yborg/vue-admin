@@ -1,5 +1,5 @@
 <template>
-    <div id='layout'>
+    <div id='layout' :class="[ menuStatus ? 'close' : 'open' ]">
         <LayoutHeader/>
         <LayoutMain/>
         <LayoutNav/>
@@ -14,8 +14,11 @@ export default {
     name: 'layout',
     components: { LayoutHeader, LayoutMain, LayoutNav },
     data() {
-        return {
-
+        return {}
+    },
+    computed: {
+        menuStatus() {
+            return this.$store.state.isCollapse;
         }
     }
 }

@@ -8,3 +8,5 @@
 .el-submenu {
     &.is-active.is-opened .el-submenu__title { background-color: $mainColor !important; }
 }
+
+.el-menu { border: none; }
