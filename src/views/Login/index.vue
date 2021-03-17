@@ -173,7 +173,8 @@ export default {
         };
     },
     created() {},
-    mounted() {},
+    mounted() {
+    },
     methods: {
         //切换登录、注册
         toggleMenu(data) {
@@ -244,13 +245,17 @@ export default {
                 code: this.ruleForm.code,
                 module: "register",
             };
-            Login(requestData)
+            this.$store
+                .dispatch("login", requestData)
                 .then((response) => {
-                    console.log(response, 11);
+                    console.log("登录成功");
+                    console.log(response);
+                    //页面跳转
+                    this.$router.push({
+                        name: "Console",
+                    });
                 })
-                .catch((error) => {
-                    console.log(error);
-                });
+                .catch((error) => {});
         },
         //注册
         register() {

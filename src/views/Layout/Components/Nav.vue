@@ -46,12 +46,11 @@ export default {
     },
     computed: {
         isCollapse() {
-            return this.$store.state.isCollapse;
+            return this.$store.state.app.isCollapse;
         },
     },
     mounted() {
         console.log(this.$router.options.routes);
-        console.log(this.isCollapse);
     },
     methods: {},
 };

@@ -9,9 +9,9 @@ export default {
     name: 'console',
     data() {
         return {
-
+        
         }
-    }
+    },
 }
 </script>
 
