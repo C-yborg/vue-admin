@@ -28,7 +28,7 @@ export default {
     methods: {
         // 控制Nav的伸缩
         navMenuState() {
-            this.$store.commit('SET_COLLAPSE');
+            this.$store.commit('app/SET_COLLAPSE');
         }
     }
 };

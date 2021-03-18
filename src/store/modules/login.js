@@ -1,4 +1,5 @@
 const login = {
+    namespaced: true,
     state: {},
     getters: {},
     mutations: {},
