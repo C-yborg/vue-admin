@@ -5,7 +5,7 @@
         </div>
         <div class="pull-right">
             <div class="pull-left user-info">
-                管理员
+                {{ username }}
             </div>
             <div class="pull-left header-icon">
                 <svg-icon iconClass="exit" className="exit" />
@@ -15,27 +15,30 @@
 </template>
 
 <script>
-import SvgIcon from "../../../icons/SvgIcon.vue";
+import SvgIcon from '../../../icons/SvgIcon.vue';
 export default {
     // name: 'layout',
     components: { SvgIcon },
     data() {
         return {};
     },
-    mounted() {
-        
+    mounted() {},
+    computed: {
+        username() {
+            return this.$store.state.app.username;
+        },
     },
     methods: {
         // 控制Nav的伸缩
         navMenuState() {
             this.$store.commit('app/SET_COLLAPSE');
-        }
-    }
+        },
+    },
 };
 </script>
 
-<style lang='scss' scoped>
-@import "@/styles/config.scss";
+<style lang="scss" scoped>
+@import '@/styles/config.scss';
 #header-wrap {
     position: fixed;
     top: 0;
@@ -46,7 +49,7 @@ export default {
     box-shadow: 0px 3px 16px 0px rbga(0, 0, 0, 0.1);
     -webkit-box-shadow: 0px 3px 16px 0px rbga(0, 0, 0, 0.1);
     line-height: 75px;
-    @include webkit(transition, all .3s ease 0s);
+    @include webkit(transition, all 0.3s ease 0s);
 }
 .header-icon {
     padding: 0 32px;
@@ -61,7 +64,9 @@ export default {
     height: 100%;
     padding: 0 32px;
     border-right: 1px solid #ededed;
-    + .header-icon { padding: 0 28px; }
+    + .header-icon {
+        padding: 0 28px;
+    }
 }
 //左侧导航展开时 header的偏移量
 .open {

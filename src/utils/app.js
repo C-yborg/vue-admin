@@ -1,12 +1,12 @@
 import cookie from 'cookie_js';
 
 const adminToken = 'admin_toKen';
-
+const usernameKey = 'username';
 export function getToken() {
     return cookie.get(adminToken);
 }
 
-export function setToken() {
+export function setToken(toKen) {
     return cookie.set(adminToken, toKen);
 }
 
@@ -14,6 +14,10 @@ export function removeToken() {
     return cookie.remove(adminToken);
 }
 
-export function setUsername() {
-    return cookie.set('username', value);
+export function setUsername(value) {
+    return cookie.set(usernameKey, value);
+}
+
+export function getUsername() {
+    return cookie.get(usernameKey);
 }
