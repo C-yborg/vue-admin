@@ -8,7 +8,7 @@
                 {{ username }}
             </div>
             <div class="pull-left header-icon">
-                <svg-icon iconClass="exit" className="exit" />
+                <svg-icon iconClass="exit" className="exit" @click="" />
             </div>
         </div>
     </div>
