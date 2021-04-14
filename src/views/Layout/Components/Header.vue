@@ -7,8 +7,8 @@
             <div class="pull-left user-info">
                 {{ username }}
             </div>
-            <div class="pull-left header-icon">
-                <svg-icon iconClass="exit" className="exit" @click="" />
+            <div class="pull-left header-icon" @click="exit">
+                <svg-icon iconClass="exit" className="exit" />
             </div>
         </div>
     </div>
@@ -32,6 +32,14 @@ export default {
         // 控制Nav的伸缩
         navMenuState() {
             this.$store.commit('app/SET_COLLAPSE');
+        },
+        exit() {
+            console.log(1);
+            this.$store.dispatch('app/exit').then(() => {
+                this.$router.push({
+                    name: 'Login',
+                });
+            });
         },
     },
 };

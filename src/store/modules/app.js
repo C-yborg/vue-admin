@@ -1,12 +1,18 @@
 import { Login } from '@/api/login';
-import { setToken, setUsername, getUsername } from '@/utils/app.js';
+import {
+    setToken,
+    setUsername,
+    getUsername,
+    removeUsername,
+    removeToken,
+} from '@/utils/app.js';
 
 const app = {
     namespaced: true,
     state: {
         isCollapse: JSON.parse(sessionStorage.getItem('isCollapse')) || false, //控制左侧导航伸缩
         to_ken: '',
-        username: '',
+        username: getUsername() || '',
     },
     getters: {
         isCollapse: state => state.isCollapse,
@@ -43,6 +49,15 @@ const app = {
                     .catch(error => {
                         reject(error);
                     });
+            });
+        },
+        exit({ commit }) {
+            return new Promise((resolve, reject) => {
+                removeUsername();
+                removeToken();
+                commit('SET_TOKEN', '');
+                commit('SET_USERNAME', '');
+                resolve();
             });
         },
     },
