@@ -6,7 +6,7 @@
                     <label for="">类型：</label>
                     <div class="wrap-content">
                         <el-select
-                            v-model="value"
+                            v-model="categoryValue"
                             placeholder="请选择"
                             style="width:100%;"
                         >
@@ -26,7 +26,7 @@
                     <label for="">日期：</label>
                     <div class="wrap-content">
                         <el-date-picker
-                            v-model="value2"
+                            v-model="dateValue"
                             type="datetimerange"
                             align="right"
                             start-placeholder="开始日期"
@@ -64,7 +64,11 @@
                 <el-button type="danger" style="width:100%;">搜索</el-button>
             </el-col>
             <el-col :span="3">
-                <el-button type="danger" class="pull-right" style="width:100%;"
+                <el-button
+                    type="danger"
+                    class="pull-right"
+                    style="width:100%;"
+                    @click="dialogInfo = true"
                     >新增</el-button
                 >
             </el-col>
@@ -103,13 +107,19 @@
                 </el-pagination>
             </el-col>
         </el-row>
+
+        <!-- 新增弹窗 -->
+        <DialogInfo :flag="dialogInfo" @close="closeDialog" />
     </div>
 </template>
 
 <script>
+import DialogInfo from './dialog/info';
 export default {
+    components: { DialogInfo },
     data() {
         return {
+            dialogInfo: false,
             options: [
                 {
                     value: '选项1',
@@ -132,8 +142,8 @@ export default {
                     label: '北京烤鸭',
                 },
             ],
-            value: '',
-            value2: '',
+            categoryValue: '',
+            dateValue: '',
             searchOption: [
                 { value: 'id', label: 'ID' },
                 { value: 'title', label: '标题' },
@@ -162,12 +172,16 @@ export default {
             ],
         };
     },
+    mounted() {},
     methods: {
         handleSizeChange(val) {
             console.log(`每页 ${val} 条`);
         },
         handleCurrentChange(val) {
             console.log(`当前页: ${val}`);
+        },
+        closeDialog() {
+            this.dialogInfo = false;
         },
     },
 };
